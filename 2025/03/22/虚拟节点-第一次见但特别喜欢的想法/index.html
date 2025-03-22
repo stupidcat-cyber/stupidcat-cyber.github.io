@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>虚拟节点--第一次见但特别喜欢的想法 | Spring Garden</title><meta name="author" content="stupid_spring,3107831889@qq.com"><meta name="copyright" content="stupid_spring"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="通讯延迟(csp第35次)时间限制： 1.5 秒 空间限制： 512 MiB 相关文件： 题目目录（样例文件） 题目描述给定二维平面上 n 个节点，以及 m 个通讯基站。第 i 个基站可以覆盖以坐标 (xi,yi) 为中心、2ri​ 为边长的正方形区域，并使正方形区域内（包含边界）所有节点以 ti​ 单位时间的延迟进行相互通讯。 求节点 1 到 n 的最短通讯延迟。 输入格式从标准输入读入数据。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟节点--第一次见但特别喜欢的想法">
+<meta property="og:url" content="https://stupidcat-cyber.github.io/2025/03/22/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A7%81%E4%BD%86%E7%89%B9%E5%88%AB%E5%96%9C%E6%AC%A2%E7%9A%84%E6%83%B3%E6%B3%95/index.html">
+<meta property="og:site_name" content="Spring Garden">
+<meta property="og:description" content="通讯延迟(csp第35次)时间限制： 1.5 秒 空间限制： 512 MiB 相关文件： 题目目录（样例文件） 题目描述给定二维平面上 n 个节点，以及 m 个通讯基站。第 i 个基站可以覆盖以坐标 (xi,yi) 为中心、2ri​ 为边长的正方形区域，并使正方形区域内（包含边界）所有节点以 ti​ 单位时间的延迟进行相互通讯。 求节点 1 到 n 的最短通讯延迟。 输入格式从标准输入读入数据。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://stupidcat-cyber.github.io/images/stsp.jpg">
+<meta property="article:published_time" content="2025-03-22T07:50:05.000Z">
+<meta property="article:modified_time" content="2025-03-22T07:54:13.753Z">
+<meta property="article:author" content="stupid_spring">
+<meta property="article:tag" content="dijkstra">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="虚拟节点， 单源最短路">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://stupidcat-cyber.github.io/images/stsp.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "虚拟节点--第一次见但特别喜欢的想法",
+  "url": "https://stupidcat-cyber.github.io/2025/03/22/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A7%81%E4%BD%86%E7%89%B9%E5%88%AB%E5%96%9C%E6%AC%A2%E7%9A%84%E6%83%B3%E6%B3%95/",
+  "image": "https://stupidcat-cyber.github.io/images/stsp.jpg",
+  "datePublished": "2025-03-22T07:50:05.000Z",
+  "dateModified": "2025-03-22T07:54:13.753Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "stupid_spring",
+      "url": "https://stupidcat-cyber.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/webAva/cat.png"><link rel="canonical" href="https://stupidcat-cyber.github.io/2025/03/22/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A7%81%E4%BD%86%E7%89%B9%E5%88%AB%E5%96%9C%E6%AC%A2%E7%9A%84%E6%83%B3%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '虚拟节点--第一次见但特别喜欢的想法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/stsp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> tags</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fas fa-comment"></i><span> shuoshuo</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Spring Garden</span></a><a class="nav-page-title" href="/"><span class="site-name">虚拟节点--第一次见但特别喜欢的想法</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> tags</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> link</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw fas fa-comment"></i><span> shuoshuo</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">虚拟节点--第一次见但特别喜欢的想法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-22T07:50:05.000Z" title="发表于 2025-03-22 15:50:05">2025-03-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-22T07:54:13.753Z" title="更新于 2025-03-22 15:54:13">2025-03-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA/">图论</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA/%E6%9C%80%E7%9F%AD%E8%B7%AF/">最短路</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95/%E5%9B%BE%E8%AE%BA/%E6%9C%80%E7%9F%AD%E8%B7%AF/dijkstra/">dijkstra</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="通讯延迟-csp第35次"><a href="#通讯延迟-csp第35次" class="headerlink" title="通讯延迟(csp第35次)"></a>通讯延迟(csp第35次)</h1><p><strong>时间限制：</strong> 1.5 秒</p>
+<p><strong>空间限制：</strong> 512 MiB</p>
+<p><strong>相关文件：</strong> <a target="_blank" rel="noopener" href="https://sim.csp.thusaac.com/staticdata/down/CSP202409-4.zip">题目目录（样例文件）</a></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定二维平面上 n 个节点，以及 m 个通讯基站。第 i 个基站可以覆盖以坐标 (xi,yi) 为中心、2ri​ 为边长的正方形区域，并使正方形区域内（包含边界）所有节点以 ti​ 单位时间的延迟进行相互通讯。</p>
+<p>求节点 1 到 n 的最短通讯延迟。</p>
+<h2 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h2><p>从标准输入读入数据。</p>
+<p>第一行包含空格分隔的两个正整数 n、m；</p>
+<p>接下来 n 行，每行两个整数 xi,yi，代表第 i 个节点的坐标；</p>
+<p>接下来 m 行，每行四个整数 xj,yj,rj,tj​，代表第 j 个通讯基站的坐标，通讯半径与通讯延迟。</p>
+<h2 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h2><p>输出到标准输出。</p>
+<p>输出一行，即节点 1 到 n 的最短通讯延迟；如果无法通讯，则输出 <code>Nan</code>。</p>
+<h2 id="样例输入"><a href="#样例输入" class="headerlink" title="样例输入"></a>样例输入</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">5 5</span><br><span class="line">0 0</span><br><span class="line">2 4</span><br><span class="line">4 0</span><br><span class="line">5 3</span><br><span class="line">5 5</span><br><span class="line">1 2 2 5</span><br><span class="line">3 5 2 6</span><br><span class="line">2 0 2 1</span><br><span class="line">4 2 2 3</span><br><span class="line">5 4 1 2</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例输出"><a href="#样例输出" class="headerlink" title="样例输出"></a>样例输出</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6</span><br></pre></td></tr></table></figure>
+
+<h2 id="样例解释"><a href="#样例解释" class="headerlink" title="样例解释"></a>样例解释</h2><p>1 号通讯基站延迟为 5，覆盖节点 1、2；</p>
+<p>2 号通讯基站延迟为 6，覆盖节点 2、4、5；</p>
+<p>3 号通讯基站延迟为 1，覆盖节点 1、3；</p>
+<p>4 号通讯基站延迟为 3，覆盖节点 2、3、4；</p>
+<p>5 号通讯基站延迟为 2，覆盖节点 4、5。</p>
+<p>最短延迟方案为：</p>
+<ol>
+<li><p>节点 1 通过 3 号基站传讯至节点 3，延迟 1；</p>
+</li>
+<li><p>节点 3 通过 4 号基站传讯至节点 4，延迟 3；</p>
+</li>
+<li><p>节点 4 通过 5 号基站传讯至节点 5，延迟 2；</p>
+</li>
+</ol>
+<p>总计延迟为 6。</p>
+<h2 id="子任务"><a href="#子任务" class="headerlink" title="子任务"></a>子任务</h2><p>30 的测试数据满足 n,m≤100；</p>
+<p>对于额外 30 的测试数据，每个通讯基站至多覆盖 20 个节点；</p>
+<p>全部的测试数据满足 n,m≤5000 且 0≤xi,yi,ri≤10^9、1≤ti≤10^5。</p>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><ul>
+<li>初看此题容易想到dijkstra</li>
+<li>但本题的难点在于建图 同一个基站内的点两两建边 所费时间代价不小 且建出来的图将会十分复杂</li>
+<li>本题所给数据下 稀疏图与稠密图的极端情况均有可能出现 dijkstra堆优化之后最短路算法本身已经没有多少优化的余地 </li>
+<li>点的范围很大 实际涉及点数不那么多 想到离散化 但其对图的复杂度于事无补</li>
+<li>于是看到了这个惊为天人的想法：<em><strong>虚拟节点！</strong></em></li>
+<li>对于一个站覆盖的范围 新建一个虚拟节点 再建所有节点通向虚拟节点的边 与虚拟节点通向所有节点的边 (它们的边权之和为t) 自然实现了这些点两两之间的双向连接 且边的条数从k(k-1)减为2k 大大简化了图 之后便可没有后顾之忧的使用堆优化版的dijkstra啦！</li>
+</ul>
+<h1 id="代码与注释"><a href="#代码与注释" class="headerlink" title="代码与注释"></a>代码与注释</h1><h2 id="notice！数组要开的足够大-以防RE……"><a href="#notice！数组要开的足够大-以防RE……" class="headerlink" title="notice！数组要开的足够大 以防RE……"></a>notice！数组要开的足够大 以防RE……</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dijkstra常用于解决非负权边 稠密图的问题 不怕有环</span></span><br><span class="line"><span class="comment">// 对于有重边的情况 建图时边权取最小值即可</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">200100</span> * <span class="number">2</span>;</span><br><span class="line"><span class="comment">// 头节点，权重，指向点，下一条边</span></span><br><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; PII;</span><br><span class="line"><span class="type">int</span> h[N], w[N*<span class="number">20</span>], e[N*<span class="number">20</span>], ne[N*<span class="number">20</span>], idx; <span class="comment">// 每个通讯基站最多覆盖20个点 可据此确定边的最大条数</span></span><br><span class="line"><span class="type">int</span> dist[N]; <span class="comment">// 存储所有点到一号点的距离</span></span><br><span class="line"><span class="type">bool</span> st[N]; <span class="comment">// 存储每个点是否已经确定</span></span><br><span class="line"><span class="comment">// 本题的关键在于图的存储 若一个通讯站包含k个点 则需要使用双重嵌套循环建立每两个点之间的距离</span></span><br><span class="line"><span class="comment">// 一个通讯站就要建k(k-1)条边 这样的时间复杂度太高 考虑优化</span></span><br><span class="line"><span class="comment">// 想象一个虚拟点 这样一来只需创建每个点到虚拟点 和虚拟点到每个点的边即可 一共2k条边</span></span><br><span class="line"><span class="comment">// 这样大大降低了图的边数 可以使用堆优化版的dijkstra了！</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123;</span><br><span class="line">    e[idx] = b, ne[idx] = h[a], w[idx] = c, h[a] = idx++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">dijkstra</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dist, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dist);</span><br><span class="line">    dist[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    priority_queue&lt;PII, vector&lt;PII&gt;, greater&lt;PII&gt;&gt; q; </span><br><span class="line">    q.<span class="built_in">push</span>(&#123;<span class="number">0</span>, <span class="number">1</span>&#125;);</span><br><span class="line">    <span class="keyword">while</span> (q.<span class="built_in">empty</span>() == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> d = q.<span class="built_in">top</span>().first, u = q.<span class="built_in">top</span>().second;</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">if</span>(st[u]) <span class="keyword">continue</span>;</span><br><span class="line">        st[u] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> l = h[u]; l!=<span class="number">-1</span>; l=ne[l]) &#123;</span><br><span class="line">            <span class="type">int</span> td = w[l], v = e[l];</span><br><span class="line">            <span class="keyword">if</span>(st[v]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span>(d+td &lt; dist[v]) &#123;</span><br><span class="line">                dist[v] = d+td;</span><br><span class="line">                q.<span class="built_in">push</span>(&#123;dist[v], v&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(dist[n]==<span class="number">0x3f3f3f3f</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> dist[n];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    PII node[N];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=n; i++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;node[i].first, &amp;node[i].second);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(h, <span class="number">-1</span>, <span class="keyword">sizeof</span> h); <span class="comment">// 初始化邻接表</span></span><br><span class="line">    idx = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 处理每个站</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=m; i++) &#123;</span><br><span class="line">        <span class="type">int</span> x, y, r, t;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;x, &amp;y, &amp;r, &amp;t);</span><br><span class="line">        <span class="type">int</span> lx = x-r, rx = x+r, ly = y-r, ry = y+r;</span><br><span class="line">        <span class="type">int</span> vi = n+i; <span class="comment">// 虚拟节点编号 从n开始往后编</span></span><br><span class="line">        <span class="comment">// 遍历所有节点 找出覆盖范围</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>; j&lt;=n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(node[j].first&gt;=lx&amp;&amp;node[j].first&lt;=rx&amp;&amp;node[j].second&gt;=ly&amp;&amp;node[j].second&lt;=ry) &#123;</span><br><span class="line">                <span class="built_in">add</span>(j, vi, <span class="number">0</span>); <span class="comment">// 节点到虚拟点边权0</span></span><br><span class="line">                <span class="built_in">add</span>(vi, j, t); <span class="comment">// 虚拟点到节点边权t</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> res = <span class="built_in">dijkstra</span>(n);</span><br><span class="line">    <span class="keyword">if</span>(res == <span class="number">-1</span>) <span class="built_in">puts</span>(<span class="string">&quot;Nan&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, res);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://stupidcat-cyber.github.io">stupid_spring</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://stupidcat-cyber.github.io/2025/03/22/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A7%81%E4%BD%86%E7%89%B9%E5%88%AB%E5%96%9C%E6%AC%A2%E7%9A%84%E6%83%B3%E6%B3%95/">https://stupidcat-cyber.github.io/2025/03/22/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A7%81%E4%BD%86%E7%89%B9%E5%88%AB%E5%96%9C%E6%AC%A2%E7%9A%84%E6%83%B3%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://stupidcat-cyber.github.io" target="_blank">Spring Garden</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/dijkstra/">dijkstra</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a><a class="post-meta__tags" href="/tags/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9%EF%BC%8C-%E5%8D%95%E6%BA%90%E6%9C%80%E7%9F%AD%E8%B7%AF/">虚拟节点， 单源最短路</a></div><div class="post-share"><div class="social-share" data-image="/images/stsp.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/03/20/P1950%E9%95%BF%E6%96%B9%E5%BD%A2-%E5%8D%95%E8%B0%83%E6%A0%88/" title="P1950长方形_单调栈"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">P1950长方形_单调栈</div></div><div class="info-2"><div class="info-item-1">P1950 长方形题目描述小明今天突发奇想，想从一张用过的纸中剪出一个长方形。 为了简化问题，小明做出如下规定： （1）这张纸的长宽分别为 $n,m$。小明将这张纸看成是由$n\times m$个格子组成，在剪的时候，只能沿着格子的边缘剪。 （2）这张纸有些地方小明以前在上面画过，剪出来的长方形不能含有以前画过的地方。 （3）剪出来的长方形的大小没有限制。 小明看着这张纸，想了好多种剪的方法，可是到底有几种呢？小明数不过来，你能帮帮他吗？ 输入格式第一行两个正整数 $n,m$，表示这张纸的长度和宽度。 接下来有 $n$ 行，每行 $m$ 个字符，每个字符为 * 或者 .。 字符 * 表示以前在这个格子上画过，字符 . 表示以前在这个格子上没画过。 输出格式仅一个整数，表示方案数。 输入输出样例 #1输入 #112345676 4.....***.*...***...*.***  输出 #1138  说明&#x2F;提示【数据规模】 对 $10%$ 的数据，满足 $1\leq n\leq 10,1\leq m\leq 10$ 对 $30%$ 的数据，满足 $1\leq n\leq...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/03/06/dijkstra-%E5%A0%86%E4%BC%98%E5%8C%96-%E5%86%85%E9%99%84dijkstra%E5%8E%9F%E7%90%86%E8%A7%A3%E9%87%8A/" title="dijkstra_堆优化(内附dijkstra原理解释)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-06</div><div class="info-item-2">dijkstra_堆优化(内附dijkstra原理解释)</div></div><div class="info-2"><div class="info-item-1">P4779 【模板】单源最短路径（标准版）题目背景2018 年 7 月 19 日，某位同学在 NOI Day 1 T1 归程 一题里非常熟练地使用了一个广为人知的算法求最短路。 然后呢？ $100 \rightarrow 60$； $\text{Ag} \rightarrow \text{Cu}$； 最终，他因此没能与理想的大学达成契约。 小 F 衷心祝愿大家不再重蹈覆辙。 题目描述给定一个 $n$ 个点，$m$ 条有向边的带非负权图，请你计算从 $s$ 出发，到每个点的距离。 数据保证你能从 $s$ 出发到任意点。 输入格式第一行为三个正整数 $n, m, s$。第二行起 $m$ 行，每行三个非负整数 $u_i, v_i, w_i$，表示从 $u_i$ 到 $v_i$ 有一条权值为 $w_i$ 的有向边。 输出格式输出一行 $n$ 个空格分隔的非负整数，表示 $s$ 到每个点的距离。 输入输出样例 #1输入 #112345674 6 11 2 22 3 22 4 11 3 53 4 31 4 4  输出 #110 2 4 3  说明&#x2F;提示样例解释请参考...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/stsp.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">stupid_spring</div><div class="author-info-description">This is my blog</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%AE%AF%E5%BB%B6%E8%BF%9F-csp%E7%AC%AC35%E6%AC%A1"><span class="toc-number">1.</span> <span class="toc-text">通讯延迟(csp第35次)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">题目描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">输入格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">输出格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%85%A5"><span class="toc-number">1.4.</span> <span class="toc-text">样例输入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E4%BE%8B%E8%BE%93%E5%87%BA"><span class="toc-number">1.5.</span> <span class="toc-text">样例输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E4%BE%8B%E8%A7%A3%E9%87%8A"><span class="toc-number">1.6.</span> <span class="toc-text">样例解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%90%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.7.</span> <span class="toc-text">子任务</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%98%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">题解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E4%B8%8E%E6%B3%A8%E9%87%8A"><span class="toc-number">3.</span> <span class="toc-text">代码与注释</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#notice%EF%BC%81%E6%95%B0%E7%BB%84%E8%A6%81%E5%BC%80%E7%9A%84%E8%B6%B3%E5%A4%9F%E5%A4%A7-%E4%BB%A5%E9%98%B2RE%E2%80%A6%E2%80%A6"><span class="toc-number">3.1.</span> <span class="toc-text">notice！数组要开的足够大 以防RE……</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/22/%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A7%81%E4%BD%86%E7%89%B9%E5%88%AB%E5%96%9C%E6%AC%A2%E7%9A%84%E6%83%B3%E6%B3%95/" title="虚拟节点--第一次见但特别喜欢的想法">虚拟节点--第一次见但特别喜欢的想法</a><time datetime="2025-03-22T07:50:05.000Z" title="发表于 2025-03-22 15:50:05">2025-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/20/P1950%E9%95%BF%E6%96%B9%E5%BD%A2-%E5%8D%95%E8%B0%83%E6%A0%88/" title="P1950长方形_单调栈">P1950长方形_单调栈</a><time datetime="2025-03-20T03:32:24.000Z" title="发表于 2025-03-20 11:32:24">2025-03-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/20/P1955-%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%8A%A8%E5%88%86%E6%9E%90/" title="P1955_程序自动分析">P1955_程序自动分析</a><time datetime="2025-03-20T03:30:52.000Z" title="发表于 2025-03-20 11:30:52">2025-03-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/20/p2216-%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97%E5%A4%84%E7%90%86%E4%BA%8C%E7%BB%B4%E9%97%AE%E9%A2%98/" title="p2216_单调队列处理二维问题">p2216_单调队列处理二维问题</a><time datetime="2025-03-20T03:29:06.000Z" title="发表于 2025-03-20 11:29:06">2025-03-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/20/P1884-%E4%BA%8C%E7%BB%B4%E7%A6%BB%E6%95%A3%E5%8C%96%E4%B8%8E%E5%B7%AE%E5%88%86/" title="P1884_二维离散化与差分">P1884_二维离散化与差分</a><time datetime="2025-03-20T03:24:44.000Z" title="发表于 2025-03-20 11:24:44">2025-03-20</time></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By stupid_spring</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.4</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
